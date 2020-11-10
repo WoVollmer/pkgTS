@@ -1,0 +1,35 @@
+Package: pkgTS
+Title: Time Series functions
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Wolfgang",
+           family = "Vollmer",
+           role = c("aut", "cre"),
+           email = "wo.vollmer@online.de",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Maintainer: 'Wolfgang Vollmer' <wo.vollmer@online.de>
+Description: Package provides functions for climate and
+    corona-virus analysis and forecasts. Support of stock analysis still
+    planned.
+License: GPL-3
+Depends: 
+    R (>= 3.2)
+Imports: 
+    patchwork,
+    checkmate,
+    highcharter,
+    dygraphs,
+    ggplot2,
+    dplyr,
+    tidyr,
+    magrittr
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat,
+    covr
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+VignetteBuilder: knitr
