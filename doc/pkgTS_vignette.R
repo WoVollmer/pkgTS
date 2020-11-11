@@ -7,10 +7,25 @@ knitr::opts_chunk$set(
 ## ----setup--------------------------------------------------------------------
 library(pkgTS)
 
-## ---- fig.show='hold'---------------------------------------------------------
-plot(1:10)
-plot(10:1)
+## ---- echo = TRUE-------------------------------------------------------------
 
-## ---- echo=FALSE, results='asis'----------------------------------------------
-knitr::kable(head(mtcars, 10))
+dir("./../R/")
+
+
+## -----------------------------------------------------------------------------
+
+tail(corona_data %>% dplyr::filter(Country == "Germany"))
+
+
+
+## -----------------------------------------------------------------------------
+
+tail(uts_get_corona_data_wide(
+  corona_data %>% dplyr::filter(Country == "Germany")))
+
+
+## ---- fig.width = 7, fig.asp = 0.618, fig.show='hold'-------------------------
+
+ggts_cum_daily(corona_data, country = "Germany", weeks = 6)
+
 

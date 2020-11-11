@@ -8,7 +8,7 @@
 <!-- badges: end -->
 
 The goal of R package `pkgTS` is to provide functions for time series
-analysis, e.g. ussable for climate or corona virus spread analysis.
+analysis, e.g. usable for climate or corona virus spread analysis.
 
 ## Installation
 
