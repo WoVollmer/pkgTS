@@ -7,18 +7,13 @@
 
 <!-- badges: end -->
 
-The goal of pkgTS is to …
+The goal of R package `pkgTS` is to provide functions for time series
+analysis, e.g. ussable for climate or corona virus spread analysis.
 
 ## Installation
 
-You can install the released version of pkgTS from
-[CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("pkgTS")
-```
-
-And the development version from [GitHub](https://github.com/) with:
+You can install the development version from
+[GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -27,7 +22,8 @@ devtools::install_github("WoVollmer/pkgTS")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to plot corona time series
+data:
 
 ``` r
 library(pkgTS)
@@ -35,28 +31,30 @@ library(pkgTS)
 #>   method            from
 #>   as.zoo.data.frame zoo
 ## basic example code
+ggts_cum_daily(corona_data, country = "Germany", weeks = 6)
+#> Scale for 'x' is already present. Adding another scale for 'x', which will
+#> replace the existing scale.
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+<img src="man/figures/README-example-1.png" width="100%" />
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+
+# note for display on GitHub:
+#  resulted plot files in /man/figures to be committed and pushed to package
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date.
+## Corona Virus Dashboard
 
-You can also embed plots, for example:
+The **`Corona Virus Dashboard`** provides analysis of the time series
+data provided by the **Johns Hopkins University** on GitHub. For links
+and references see the Dashboard-file *Corona Virus Dashboard Web Site*
+rsp. RMD-file *Corona\_Virus\_TS\_Dashboard.Rmd*.
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+The
+[Corona\_Virus\_TS\_Dashboard.Rmd](https://github.com/WoVollmer/R-TimesSeriesAnalysis/tree/master/Corona-Virus)
+file is stored on GitHub repository.
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub\!
+The [Corona Virus Dashboard Web
+Site](https://wovollmer.github.io/github.io/) is published as **GitHub
+page**
