@@ -7,11 +7,11 @@
 hc_world_map_plot(data, value, title = "Text")
 }
 \arguments{
-\item{data}{tbd}
+\item{data}{A data.frame object with data to chart. Code region and value are required.}
 
-\item{value}{tbd}
+\item{value}{A string value with the name of the variable to chart.}
 
-\item{title}{tbd}
+\item{title}{A string value with the title of the chart.}
 }
 \value{
 highchart plot
@@ -20,12 +20,21 @@ highchart plot
 highcharter World Map plot
 }
 \examples{
-# so far no example
+last_date <- max(corona_data$Date)
+data <- corona_data \%>\%
+  dplyr::filter(Date == last_date & Case_Type == "Confirmed" &
+                Country != "World")
+
+data(worldgeojson, package = "highcharter")
+hc_world_map_plot(data, value = "Population",  title = "World Population")
+
 }
 \references{
 \strong{Highcharts} \emph{CONFIGURATION OPTIONS:}
 \url{https://api.highcharts.com/highcharts/title}
 
 \strong{Manual pages for highcharter}
+\url{https://rdrr.io/cran/highcharter/man/hc_add_series_map.html}
+
 \url{https://rdrr.io/cran/highcharter/man/hc_xAxis.html}
 }

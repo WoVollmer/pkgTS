@@ -22,17 +22,23 @@ highchart plot
 Visualization with top x country bar chart
 }
 \examples{
-# example to get ordering plus World => via bind_rows(), currently not used:  
+# example to get ordering plus World => via bind_rows(), currently not used:
 #  data <- bind_rows(
 #    data \%>\% dplyr::filter(Country != "World") \%>\%
-#      arrange(desc(Cases_100k)) \%>\% head(14),   
-#    data \%>\%  
+#      arrange(desc(Cases_100k)) \%>\% head(14),
+#    data \%>\%
 #      dplyr::filter(Country == "World"))
+last_date <- max(corona_data$Date)
+data <- corona_data \%>\%
+  dplyr::filter(Date == last_date & Case_Type == "Confirmed" & Country != "World")
+hc_bar_chart_country(data, y = "Population",  title = "World Population")
 }
 \references{
 \strong{Highcharts} \emph{CONFIGURATION OPTIONS:}
 \url{https://api.highcharts.com/highcharts/title}
 
 \strong{Manual pages for highcharter}
+\url{https://rdrr.io/cran/highcharter/man/hc_add_series_map.html}
+
 \url{https://rdrr.io/cran/highcharter/man/hc_xAxis.html}
 }

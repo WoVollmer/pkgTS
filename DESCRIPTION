@@ -22,7 +22,8 @@ Imports:
     ggplot2,
     dplyr,
     tidyr,
-    magrittr
+    magrittr,
+    utils
 Suggests: 
     knitr,
     rmarkdown,
