@@ -29,12 +29,12 @@ data(worldgeojson, package = "highcharter")
 hc_world_map_plot(data, value = "Population",  title = "World Population")
 
 }
-\references{
-\strong{Highcharts} \emph{CONFIGURATION OPTIONS:}
-\url{https://api.highcharts.com/highcharts/title}
-
+\seealso{
 \strong{Manual pages for highcharter}
 \url{https://rdrr.io/cran/highcharter/man/hc_add_series_map.html}
 
 \url{https://rdrr.io/cran/highcharter/man/hc_xAxis.html}
+
+\strong{Highcharts} \emph{CONFIGURATION OPTIONS}
+\url{https://api.highcharts.com/highcharts/title}
 }

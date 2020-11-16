@@ -6,10 +6,10 @@
 \usage{
 ggts_conf_deaths_facet(
   data,
-  x = Date,
-  y = Cases,
-  vars_1 = Case_Type,
-  vars_2 = Country
+  x = .data$Date,
+  y = .data$Cases,
+  vars_1 = .data$Case_Type,
+  vars_2 = .data$Country
 )
 }
 \arguments{

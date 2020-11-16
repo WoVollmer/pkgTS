@@ -55,9 +55,12 @@ requireNamespace("dygraphs", quietly = TRUE)   # for pivot_wider
 #' # Corona data of "Germany")
 #' ggts_cum_daily(corona_data, country = "Germany", weeks = 6)
 ggts_cum_daily <- function(data,
-                           y_cum = Cases, y_daily = Daily_Cases,
-                           daily_mean = Daily_Cases_Mean,
-                           country, span = 7, weeks = 12, ...) {
+                           y_cum = .data$Cases,
+                           y_daily = .data$Daily_Cases,
+                           daily_mean = .data$Daily_Cases_Mean,
+                           country,
+                           span = 7,
+                           weeks = 12, ...) {
   data <- data %>% dplyr::filter(Country == country)
 
   plot_cum_cases <- ggts_trend_facet(data, y = {{ y_cum }}) +
@@ -93,7 +96,10 @@ ggts_cum_daily <- function(data,
 #' # 'Deaths' and 'Confirmed'
 #' ggts_trend_facet(corona_data %>% dplyr::filter(Country == "Germany"))
 #' ggts_trend_facet(corona_data %>% dplyr::filter(Country == "Germany"), y = Cases_100k)
-ggts_trend_facet <- function(data, x = Date, y = Cases, vars_1 = Case_Type) {
+ggts_trend_facet <- function(data,
+                             x = .data$Date,
+                             y = .data$Cases,
+                             vars_1 = .data$Case_Type) {
   # col_scheme <- "Set1" # "RdYlGn" #"YlOrRd" #"Oranges" # "YlGnBu" #
   p <- ggplot2::ggplot(data, aes({{ x }}, {{ y }}, col = {{ vars_1 }})) +
     facet_wrap(vars({{ vars_1 }}), ncol = 1, scales = "free_y",
@@ -123,12 +129,21 @@ ggts_trend_facet <- function(data, x = Date, y = Cases, vars_1 = Case_Type) {
 #' @examples
 #' # Corona data of "Germany", "Italy", "United States of America")
 #' ggts_conf_deaths_facet(corona_data_sel)
-ggts_conf_deaths_facet <- function(data, x = Date, y = Cases, vars_1 = Case_Type,
-                                   vars_2 = Country) {
+ggts_conf_deaths_facet <- function(data,
+                                   x = .data$Date,
+                                   y = .data$Cases,
+                                   vars_1 = .data$Case_Type,
+                                   vars_2 = .data$Country) {
+
   # col_scheme <- "Set1" # "RdYlGn" #"YlOrRd" #"Oranges" # "YlGnBu" #
 
+  # see dplyr vignette: Programming with dplyr
   # globalVariables(c("Date", "Cases", "Case_Type", "Country"))
   # still: no visible binding for global variable 'Date' ...
+  # assign NULL to each undefined column name
+  #    => no longer search for global variable => note issue with R CMD check
+  # Date <- Cases <- Case_Type <- Country <- NULL
+  #             => defined after it is used as arg
 
   ggplot2::ggplot(data, aes({{ x }}, {{ y }}, col = {{ vars_1 }})) +
     facet_grid(vars({{ vars_2 }}, {{ vars_1 }}), scales = "free_y") +
@@ -153,15 +168,17 @@ ggts_conf_deaths_facet <- function(data, x = Date, y = Cases, vars_1 = Case_Type
 #' @examples
 #' # Corona data of "Germany", "Italy", "United States of America")
 #' ggts_logscale(corona_data_sel)
-ggts_logscale <- function(data, x = Date, y = Cases, vars_1 = Country,
-                          vars_2 = Case_Type) {
+ggts_logscale <- function(data,
+                          x = .data$Date,
+                          y = .data$Cases,
+                          vars_1 = .data$Country,
+                          vars_2 = .data$Case_Type) {
   # gg_plot <-
   ggplot2::ggplot(data, aes({{ x }}, y= log10({{ y }}), col = {{ vars_1 }})) +
     labs(x = "Date", y = substitute(y),
          title =
-           "Virus Spread (with log10 scale) - World and selected Countries") +
-    geom_point() +
-    # geom_line(aes(col = {{ vars_1 }}), size = 1) +
+           "Virus Spread on log10 scale - World and selected Countries") +
+    geom_line() +
     # geom_smooth(method="loess", aes(col = {{ vars_1 }}), lty = "dashed", se=FALSE) +
     theme(legend.position = "bottom") +
     facet_wrap(vars({{ vars_2 }}), ncol = 2, scales = "free_y",
@@ -181,6 +198,14 @@ ggts_logscale <- function(data, x = Date, y = Cases, vars_1 = Country,
 #' @export
 #' @import highcharter
 #'
+#' @seealso
+#' **Manual pages for highcharter**
+#'  <https://rdrr.io/cran/highcharter/man/hc_add_series_map.html>
+#'
+#'  <https://rdrr.io/cran/highcharter/man/hc_xAxis.html>
+#'
+#' **Highcharts** *CONFIGURATION OPTIONS*
+#'  <https://api.highcharts.com/highcharts/title>
 #' @examples
 #' last_date <- max(corona_data$Date)
 #' data <- corona_data %>%
@@ -190,18 +215,10 @@ ggts_logscale <- function(data, x = Date, y = Cases, vars_1 = Country,
 #' data(worldgeojson, package = "highcharter")
 #' hc_world_map_plot(data, value = "Population",  title = "World Population")
 #'
-#' @references
-#' **Highcharts** *CONFIGURATION OPTIONS:*
-#'  <https://api.highcharts.com/highcharts/title>
-#'
-#' **Manual pages for highcharter**
-#'  <https://rdrr.io/cran/highcharter/man/hc_add_series_map.html>
-#'
-#'  <https://rdrr.io/cran/highcharter/man/hc_xAxis.html>
-#'
 hc_world_map_plot <- function(data, value, title = "Text") {
   # globalVariables(c("worldgeojson"))
-  # data(worldgeojson, package = "highcharter")
+  # worldgeojson <- NULL => error: map is not a list
+  # worldgeojson <- list(NULL) =>
   highchart() %>%
     hc_add_series_map(worldgeojson,
                       df = data,
@@ -219,21 +236,22 @@ hc_world_map_plot <- function(data, value, title = "Text") {
 
 #' Bar Chart plot with highchart()
 #'
-#' Visualization with top x country bar chart
+#' Visualization with top x country series bar chart
 #'
-#' @param data tbd
-#' @param y tbd
-#' @param title tbd
-#' @param n tbd
+#' @inheritParams hc_world_map_plot
+#' @param x A string value with the column name for the bar names,
+#'    default = "Country".
+#' @param y A string value with the column name for the bar data values.
+#' @param n numeric, number of bars in chart
 #'
-#' @examples
-#' # example to get ordering plus World => via bind_rows(), currently not used:
-#' #  data <- bind_rows(
-#' #    data %>% dplyr::filter(Country != "World") %>%
-#' #      arrange(desc(Cases_100k)) %>% head(14),
-#' #    data %>%
-#' #      dplyr::filter(Country == "World"))
-#' @inherit hc_world_map_plot references return
+#' @inherit hc_world_map_plot seealso return
+#' @seealso
+#' **Create a highchart object**
+#' <https://rdrr.io/cran/highcharter/man/hchart.html>
+#'
+#' **Highcharts** *series.bar* and *aesthetic mappings*
+#' <https://api.highcharts.com/highcharts/series.bar>
+#' <https://rdrr.io/cran/highcharter/man/hcaes.html>
 #'
 #' @examples
 #' last_date <- max(corona_data$Date)
@@ -241,19 +259,22 @@ hc_world_map_plot <- function(data, value, title = "Text") {
 #'   dplyr::filter(Date == last_date & Case_Type == "Confirmed" & Country != "World")
 #' hc_bar_chart_country(data, y = "Population",  title = "World Population")
 #' @export
-hc_bar_chart_country <- function(data, y, title = "Text", n = 15) {
-  # taken out since utils now in DESCRIPTION file: #' @importFrom utils head
+hc_bar_chart_country <- function(data, x = "Country", y, title = "Text", n = 15) {
+  # #' @importFrom utils head # taken out since utils now in DESCRIPTION
+  # #' @importFrom rlang .data
+  #     rename(col_name = .data$key) %>%
+  #     mutate(col_name = as.character(.data$col_name))
   data %>% # ungroup() %>%
     slice_max(order_by = .data[[y]], n = n) %>%
-    rename(col_name = .data[[y]]) %>%
-    # hchart() does not work with {{y}} or substitute(), ....
-    #      => fixed colname to be used and hc_yAxis() needed, otherwise "value"
-    head(n) %>%
-    hchart("bar", hcaes(x = Country,  y = col_name)) %>%
+    rename(x = .data[[x]],
+           y = .data[[y]]) %>%
+    # hchart() does not work with {{ y }} or substitute(), ....
+    #      => fixed colname to be used and hc_yAxis() needed, otherwise "y"
+    hchart("bar", hcaes(x = x,  y = y)) %>%
     hc_title(text = title) %>%
+    hc_xAxis(title = list(text = x)) %>%
     hc_yAxis(title = list(text = y)) %>%
     hc_add_theme(hc_theme_sandsignika())
-  #
 
 }
 

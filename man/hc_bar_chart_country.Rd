@@ -4,41 +4,37 @@
 \alias{hc_bar_chart_country}
 \title{Bar Chart plot with highchart()}
 \usage{
-hc_bar_chart_country(data, y, title = "Text", n = 15)
+hc_bar_chart_country(data, x = "Country", y, title = "Text", n = 15)
 }
 \arguments{
-\item{data}{tbd}
+\item{data}{A data.frame object with data to chart. Code region and value are required.}
 
-\item{y}{tbd}
+\item{x}{A string value with the column name for the bar names,
+default = "Country".}
 
-\item{title}{tbd}
+\item{y}{A string value with the column name for the bar data values.}
 
-\item{n}{tbd}
+\item{title}{A string value with the title of the chart.}
+
+\item{n}{numeric, number of bars in chart}
 }
 \value{
 highchart plot
 }
 \description{
-Visualization with top x country bar chart
+Visualization with top x country series bar chart
 }
 \examples{
-# example to get ordering plus World => via bind_rows(), currently not used:
-#  data <- bind_rows(
-#    data \%>\% dplyr::filter(Country != "World") \%>\%
-#      arrange(desc(Cases_100k)) \%>\% head(14),
-#    data \%>\%
-#      dplyr::filter(Country == "World"))
 last_date <- max(corona_data$Date)
 data <- corona_data \%>\%
   dplyr::filter(Date == last_date & Case_Type == "Confirmed" & Country != "World")
 hc_bar_chart_country(data, y = "Population",  title = "World Population")
 }
-\references{
-\strong{Highcharts} \emph{CONFIGURATION OPTIONS:}
-\url{https://api.highcharts.com/highcharts/title}
+\seealso{
+\strong{Create a highchart object}
+\url{https://rdrr.io/cran/highcharter/man/hchart.html}
 
-\strong{Manual pages for highcharter}
-\url{https://rdrr.io/cran/highcharter/man/hc_add_series_map.html}
-
-\url{https://rdrr.io/cran/highcharter/man/hc_xAxis.html}
+\strong{Highcharts} \emph{series.bar} and \emph{aesthetic mappings}
+\url{https://api.highcharts.com/highcharts/series.bar}
+\url{https://rdrr.io/cran/highcharter/man/hcaes.html}
 }

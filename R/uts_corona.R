@@ -9,7 +9,7 @@ requireNamespace("checkmate", quietly = TRUE) # assert_... functions
 #' Utilities for corona data analysis and data
 #'
 #' Provide data in wide form and adapt column names
-#' 
+#'
 #' @details Data frame columns required are checked
 #'
 #' @param data A data frame to pivot
@@ -20,44 +20,47 @@ requireNamespace("checkmate", quietly = TRUE) # assert_... functions
 #' @examples
 #' # Corona data of "Germany"
 #' uts_get_corona_data_wide(corona_data %>% dplyr::filter(Country == "Germany"))
-#' @export 
+#' @export
 uts_get_corona_data_wide <- function(data) {
 
   # assert if names_data is subset of names of input data columns
-  # => all columns exist for pivot_wider() and for select()  
+  # => all columns exist for pivot_wider() and for select()
   names_data <- c("Country",  "Date", "Population", "Case_Type", "Cases",
                   "Daily_Cases", "Cases_100k", "Daily_Cases_100k",
                   "Daily_Cases_Mean", "Daily_Cases_100k_Mean")
   assert_names(names_data, subset.of = names(data))
-  
-  data %>% 
-    pivot_wider(names_from = Case_Type, 
-                values_from = c(Cases, Daily_Cases, 
-                                Cases_100k, Daily_Cases_100k, 
-                                Daily_Cases_Mean, Daily_Cases_100k_Mean)) %>% 
-    rename(Confirmed = Cases_Confirmed,
-           Deaths = Cases_Deaths,
-           Daily_Conf = Daily_Cases_Confirmed,
-           Daily_Deaths = Daily_Cases_Deaths,
-           Conf_100k = Cases_100k_Confirmed,
-           Deaths_100k = Cases_100k_Deaths,
-           Daily_Conf_100k = Daily_Cases_100k_Confirmed,
-           Daily_Deaths_100k = Daily_Cases_100k_Deaths,
-           Daily_Conf_Mean = Daily_Cases_Mean_Confirmed, 
-           Daily_Deaths_Mean = Daily_Cases_Mean_Deaths,
-           Daily_Conf_100k_Mean = Daily_Cases_100k_Mean_Confirmed, 
-           Daily_Deaths_100k_Mean = Daily_Cases_100k_Mean_Deaths) %>% 
-    dplyr::select(Country, Population, Date, 
-                  Confirmed, Daily_Conf, Daily_Conf_Mean, Conf_100k, 
-                  Daily_Conf_100k, Daily_Conf_100k_Mean, 
-                  Deaths, Daily_Deaths, Daily_Deaths_Mean, Deaths_100k, 
-                  Daily_Deaths_100k, Daily_Deaths_100k_Mean)
+
+  data %>%
+    pivot_wider(names_from = .data$Case_Type,
+                values_from = c(.data$Cases, .data$Daily_Cases,
+                                .data$Cases_100k, .data$Daily_Cases_100k,
+                                .data$Daily_Cases_Mean,
+                                .data$Daily_Cases_100k_Mean)) %>%
+    rename(Confirmed = .data$Cases_Confirmed,
+           Deaths = .data$Cases_Deaths,
+           Daily_Conf = .data$Daily_Cases_Confirmed,
+           Daily_Deaths = .data$Daily_Cases_Deaths,
+           Conf_100k = .data$Cases_100k_Confirmed,
+           Deaths_100k = .data$Cases_100k_Deaths,
+           Daily_Conf_100k = .data$Daily_Cases_100k_Confirmed,
+           Daily_Deaths_100k = .data$Daily_Cases_100k_Deaths,
+           Daily_Conf_Mean = .data$Daily_Cases_Mean_Confirmed,
+           Daily_Deaths_Mean = .data$Daily_Cases_Mean_Deaths,
+           Daily_Conf_100k_Mean = .data$Daily_Cases_100k_Mean_Confirmed,
+           Daily_Deaths_100k_Mean = .data$Daily_Cases_100k_Mean_Deaths) %>%
+    dplyr::select(.data$Country, .data$Population, .data$Date,
+                  .data$Confirmed, .data$Daily_Conf, .data$Daily_Conf_Mean,
+                  .data$Conf_100k, .data$Daily_Conf_100k,
+                  .data$Daily_Conf_100k_Mean,
+                  .data$Deaths, .data$Daily_Deaths, .data$Daily_Deaths_Mean,
+                  .data$Deaths_100k, .data$Daily_Deaths_100k,
+                  .data$Daily_Deaths_100k_Mean)
 }
 
 #' Reproduction number calculation
-#' 
-#' Source: TU Ilmenau - GitHub 
-#' 
+#'
+#' Source: TU Ilmenau - GitHub
+#'
 #' @param new.cases Vector of daily cases data
 #' @param profile  tbd
 #' @param window tbd
@@ -68,28 +71,28 @@ uts_get_corona_data_wide <- function(data) {
 #' @param min.numerator tbd
 #'
 #' @details Here are further details
-#' 
+#'
 #' ## subsection details and so on
-#' 
+#'
 #' However, needs some text.
-#' 
+#'
 #' ### sub-subsection details
-#' 
+#'
 #' Also su-subsection needs some text.
 #' @return data.frame with as many rows as new.cases
-#' 
+#'
 #'     repronum = reproduction number
-#'     
+#'
 #'     repronum.se = reproduction number standard error
-#'     
+#'
 #'     ci.lower = confidence interval lower limit
-#'     
+#'
 #'     ci.upper = confidence interval upper limit
 #' @importFrom stats qnorm
-#' @export 
-#' @references 
+#' @export
+#' @references
 #' **TU Ilmenau** *GitHub code source:* <https://github.com/Stochastik-TU-Ilmenau/COVID-19/blob/gh-pages/estimator.r>
-#' 
+#'
 uts_repronum <- function(
   new.cases, # I
   profile, # w
@@ -102,7 +105,7 @@ uts_repronum <- function(
 ) {
   # pad zeros if desired
   if (pad.zeros) new.cases <- c(rep(0, length(profile) - 1), new.cases)
-  
+
   # compute convolutions over h, tau and both, respectively
   sum.h.I <- as.numeric(stats::filter(new.cases, rep(1, window),
                                       method = "convolution", sides = 1))
@@ -110,21 +113,21 @@ uts_repronum <- function(
                                          method = "convolution", sides = 1))
   sum.htau.wI <- as.numeric(stats::filter(sum.tau.wI, rep(1, window),
                                           method = "convolution", sides = 1))
-  
+
   # estimators
   repronum <- ifelse(sum.h.I < min.numerator, NA, sum.h.I) / ifelse(sum.htau.wI < min.denominator, NA, sum.htau.wI)
-  
+
   # standard errors
   repronum.se <- sqrt(repronum / sum.htau.wI)
-  
+
   # shift by delay
   repronum <- c(repronum, rep(NA, delay))[(1:length(repronum)) + delay]
   repronum.se <- c(repronum.se,
                    rep(NA, delay))[(1:length(repronum.se)) + delay]
-  
+
   # standard normal qunatile
   q <- qnorm(1 - (1 - conf.level) / 2)
-  
+
   # return data.frame with as many rows as new.cases
   ret <- data.frame(
     repronum = repronum,

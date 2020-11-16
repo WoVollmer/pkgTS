@@ -54,3 +54,4 @@ NULL
 #' @docType import
 NULL
 
+globalVariables(c("Date", "Cases", "Case_Type", "Country"))

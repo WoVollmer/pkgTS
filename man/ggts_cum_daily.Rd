@@ -6,9 +6,9 @@
 \usage{
 ggts_cum_daily(
   data,
-  y_cum = Cases,
-  y_daily = Daily_Cases,
-  daily_mean = Daily_Cases_Mean,
+  y_cum = .data$Cases,
+  y_daily = .data$Daily_Cases,
+  daily_mean = .data$Daily_Cases_Mean,
   country,
   span = 7,
   weeks = 12,

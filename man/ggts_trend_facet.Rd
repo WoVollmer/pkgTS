@@ -4,7 +4,12 @@
 \alias{ggts_trend_facet}
 \title{Trend facet plot for each case type}
 \usage{
-ggts_trend_facet(data, x = Date, y = Cases, vars_1 = Case_Type)
+ggts_trend_facet(
+  data,
+  x = .data$Date,
+  y = .data$Cases,
+  vars_1 = .data$Case_Type
+)
 }
 \arguments{
 \item{data}{A data frame}

@@ -4,7 +4,13 @@
 \alias{ggts_logscale}
 \title{plot countries on log10scale}
 \usage{
-ggts_logscale(data, x = Date, y = Cases, vars_1 = Country, vars_2 = Case_Type)
+ggts_logscale(
+  data,
+  x = .data$Date,
+  y = .data$Cases,
+  vars_1 = .data$Country,
+  vars_2 = .data$Case_Type
+)
 }
 \arguments{
 \item{data}{A data frame}
