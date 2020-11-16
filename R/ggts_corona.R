@@ -35,7 +35,7 @@ requireNamespace("dygraphs", quietly = TRUE)   # for pivot_wider
 #' @param data A data frame
 #' @param y_cum Unquoted `column name` of the data frame's cumulative cases
 #' @param y_daily Unquoted `column name` of the data frame's daily cases
-#' @param daily_mean Unquoted `column name` of the data frame's daily rolling mean data
+#' @param mean_daily Unquoted `column name` of the data frame's daily rolling mean data
 #' @param country Unquoted `column name` of the data frame's countries
 #' @param span Numeric, span used for rolling mean calculation
 #' @param weeks Numeric, number of time range weeks weeks for the daily data,
@@ -57,7 +57,7 @@ requireNamespace("dygraphs", quietly = TRUE)   # for pivot_wider
 ggts_cum_daily <- function(data,
                            y_cum = .data$Cases,
                            y_daily = .data$Daily_Cases,
-                           daily_mean = .data$Daily_Cases_Mean,
+                           mean_daily = .data$Mean_Daily_Cases,
                            country,
                            span = 7,
                            weeks = 12, ...) {
@@ -70,7 +70,7 @@ ggts_cum_daily <- function(data,
   data <- data %>% dplyr::filter(Date >= last_date - 7 * weeks + 1)
 
   plot_daily_cases <- ggts_trend_facet(data, y = {{ y_daily }}) +
-    geom_line(aes(y = {{ daily_mean }}, col = "Rolling Mean"),
+    geom_line(aes(y = {{ mean_daily }}, col = "Rolling Mean"),
               size = 1, na.rm = TRUE) +
     scale_x_date(date_labels = "%b %d", date_breaks = "14 days") +
     labs(title = paste(country, "- Daily Cases (past", weeks, "weeks)"),
@@ -310,11 +310,11 @@ plot_dygraph_daily <-
       dySeries("Daily_Conf",
                drawPoints = TRUE, pointSize = 3, pointShape = "circle",
                color = "tomato") %>%
-      dySeries("Daily_Conf_Mean", drawPoints = FALSE,  color = "red") %>%
+      dySeries("Mean_Daily_Conf", drawPoints = FALSE,  color = "red") %>%
       dySeries("Daily_Deaths",
                drawPoints = TRUE, pointSize = 3, pointShape = "triangle",
                color = "turquoise", axis = "y2") %>%
-      dySeries("Daily_Deaths_Mean", drawPoints = FALSE,
+      dySeries("Mean_Daily_Deaths", drawPoints = FALSE,
                color = "blue", axis = "y2") %>%
       dyRangeSelector(dateWindow =
                         c(as.character(last_date - weeks * 7), as.character(last_date)))
@@ -344,7 +344,7 @@ plot_dygraph_daily_repro <-
       dySeries("Daily_Conf",
                drawPoints = TRUE, pointSize = 3, pointShape = "triangle",
                color = "tomato", axis = "y2") %>%
-      dySeries("Daily_Conf_Mean", drawPoints = FALSE,
+      dySeries("Mean_Daily_Conf", drawPoints = FALSE,
                color = "red", axis = "y2") %>%
       dyRangeSelector(dateWindow =
                         c(as.character(last_date - weeks * 7), as.character(last_date)))
