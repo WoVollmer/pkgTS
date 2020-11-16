@@ -27,15 +27,15 @@ uts_get_corona_data_wide <- function(data) {
   # => all columns exist for pivot_wider() and for select()
   names_data <- c("Country",  "Date", "Population", "Case_Type", "Cases",
                   "Daily_Cases", "Cases_100k", "Daily_Cases_100k",
-                  "Daily_Cases_Mean", "Daily_Cases_100k_Mean")
+                  "Mean_Daily_Cases", "Mean_Daily_Cases_100k")
   assert_names(names_data, subset.of = names(data))
 
   data %>%
     pivot_wider(names_from = .data$Case_Type,
                 values_from = c(.data$Cases, .data$Daily_Cases,
                                 .data$Cases_100k, .data$Daily_Cases_100k,
-                                .data$Daily_Cases_Mean,
-                                .data$Daily_Cases_100k_Mean)) %>%
+                                .data$Mean_Daily_Cases,
+                                .data$Mean_Daily_Cases_100k)) %>%
     rename(Confirmed = .data$Cases_Confirmed,
            Deaths = .data$Cases_Deaths,
            Daily_Conf = .data$Daily_Cases_Confirmed,
@@ -44,17 +44,17 @@ uts_get_corona_data_wide <- function(data) {
            Deaths_100k = .data$Cases_100k_Deaths,
            Daily_Conf_100k = .data$Daily_Cases_100k_Confirmed,
            Daily_Deaths_100k = .data$Daily_Cases_100k_Deaths,
-           Daily_Conf_Mean = .data$Daily_Cases_Mean_Confirmed,
-           Daily_Deaths_Mean = .data$Daily_Cases_Mean_Deaths,
-           Daily_Conf_100k_Mean = .data$Daily_Cases_100k_Mean_Confirmed,
-           Daily_Deaths_100k_Mean = .data$Daily_Cases_100k_Mean_Deaths) %>%
+           Mean_Daily_Conf = .data$Mean_Daily_Cases_Confirmed,
+           Mean_Daily_Deaths = .data$Mean_Daily_Cases_Deaths,
+           Mean_Daily_Conf_100k = .data$Mean_Daily_Cases_100k_Confirmed,
+           Mean_Daily_Deaths_100k = .data$Mean_Daily_Cases_100k_Deaths) %>%
     dplyr::select(.data$Country, .data$Population, .data$Date,
-                  .data$Confirmed, .data$Daily_Conf, .data$Daily_Conf_Mean,
+                  .data$Confirmed, .data$Daily_Conf, .data$Mean_Daily_Conf,
                   .data$Conf_100k, .data$Daily_Conf_100k,
-                  .data$Daily_Conf_100k_Mean,
-                  .data$Deaths, .data$Daily_Deaths, .data$Daily_Deaths_Mean,
+                  .data$Mean_Daily_Conf_100k,
+                  .data$Deaths, .data$Daily_Deaths, .data$Mean_Daily_Deaths,
                   .data$Deaths_100k, .data$Daily_Deaths_100k,
-                  .data$Daily_Deaths_100k_Mean)
+                  .data$Mean_Daily_Deaths_100k)
 }
 
 #' Reproduction number calculation
