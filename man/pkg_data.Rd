@@ -19,8 +19,9 @@ data(corona_data)
 data(corona_data_sel)
 }
 \description{
-The datasets provide the example test data
-generated from the Johns Hopkins University data on GitHub.
+The datasets provide test data for the example which are
+generated from the Johns Hopkins University data on GitHu.
+The data does not include the lastet current case numbers.
 }
 \details{
 \code{corona_data} provides data from all countries,

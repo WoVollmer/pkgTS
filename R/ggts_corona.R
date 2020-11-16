@@ -167,7 +167,7 @@ ggts_conf_deaths_facet <- function(data,
 #' @export
 #' @examples
 #' # Corona data of "Germany", "Italy", "United States of America")
-#' ggts_logscale(corona_data_sel)
+#' ggts_logscale(corona_data_sel, y = Cases)
 ggts_logscale <- function(data,
                           x = .data$Date,
                           y = .data$Cases,

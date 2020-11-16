@@ -31,5 +31,5 @@ plot countries on log10scale
 }
 \examples{
 # Corona data of "Germany", "Italy", "United States of America")
-ggts_logscale(corona_data_sel)
+ggts_logscale(corona_data_sel, y = Cases)
 }

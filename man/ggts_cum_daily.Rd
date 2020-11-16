@@ -8,7 +8,7 @@ ggts_cum_daily(
   data,
   y_cum = .data$Cases,
   y_daily = .data$Daily_Cases,
-  daily_mean = .data$Daily_Cases_Mean,
+  mean_daily = .data$Mean_Daily_Cases,
   country,
   span = 7,
   weeks = 12,
@@ -22,7 +22,7 @@ ggts_cum_daily(
 
 \item{y_daily}{Unquoted \verb{column name} of the data frame's daily cases}
 
-\item{daily_mean}{Unquoted \verb{column name} of the data frame's daily rolling mean data}
+\item{mean_daily}{Unquoted \verb{column name} of the data frame's daily rolling mean data}
 
 \item{country}{Unquoted \verb{column name} of the data frame's countries}
 
