@@ -14,11 +14,12 @@ ggts_trend_facet(
 \arguments{
 \item{data}{A data frame}
 
-\item{x}{Unquoted \verb{column name} of the data frame's dates}
+\item{x}{Unquoted df data-variable to specify the
+time index variable (\code{default: Date}).}
 
-\item{y}{Unquoted \verb{column name} of the data frame's cases}
+\item{y}{Unquoted df data-variable of the cases}
 
-\item{vars_1}{Unquoted \verb{column name} of the data frame's case types}
+\item{vars_1}{Unquoted df data-variable of the case types}
 }
 \value{
 plot object of mode "\code{plot}"
