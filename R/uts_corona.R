@@ -10,7 +10,7 @@ requireNamespace("checkmate", quietly = TRUE) # assert_... functions
 #'
 #' Provide data in wide form and adapt column names
 #'
-#' @details Data frame columns required are checked
+#' @details The unquoted df data-variables are checked
 #'
 #' @param data A data frame to pivot
 #' @return data frame

@@ -16,7 +16,7 @@ data frame
 Provide data in wide form and adapt column names
 }
 \details{
-Data frame columns required are checked
+The unquoted df data-variables are checked
 }
 \examples{
 # Corona data of "Germany"

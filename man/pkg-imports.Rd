@@ -4,6 +4,7 @@
 \name{pkg-imports}
 \alias{pkg-imports}
 \alias{\%>\%}
+\alias{\%$\%}
 \title{Imports from other packages}
 \description{
 Objects imported from other packages
@@ -12,6 +13,6 @@ Objects imported from other packages
 These objects are imported from other packages.
 Follow the links to their documentation.
 \itemize{
-\item magrittr forward-pipe operator: \code{\link[magrittr:pipe]{magrittr::\%>\%}}
+\item magrittr forward-pipe \code{\link[magrittr:pipe]{magrittr::\%>\%}} and exposition pipe \code{\link[magrittr:exposition]{magrittr::\%$\%}} operator
 }
 }

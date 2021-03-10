@@ -1,16 +1,21 @@
-# library(ggplot2)  # for ggplot(), geom_...()
-# library(dplyr) # for filter() and "%>%"
-# library(magrittr) # for "%>%"  but "Imports from other packages"
+requireNamespace("ggplot2", quietly = TRUE) # for ggplot(), geom_...()
+requireNamespace("dplyr", quietly = TRUE)   # for filter() and "%>%"
+# for pipe operator for "%>%" requireNamespace("magrittr", quietly = TRUE)
+#    not needed, "Imports from other packages"
 #    covered by
 #          DESCRIPTION file: Imports: magrittr
 #          file package.R NULL function:
-#                #' @importFrom magrittr %>%   &  #' @export %>%     NULL
-#                #' @name pkg-imports
-#          NAMESPACE file (gen . by Roxygen): export("%>%") & importFrom(magrittr,"%>%")
-# require(tidyr) # for pivot_wider
-requireNamespace("ggplot2", quietly = TRUE) # for ggplot(), geom_...()
-requireNamespace("dplyr", quietly = TRUE)   # for filter() and "%>%"
+#                #' @importFrom magrittr %>%   &
+#                #' @export %>%
+#          and documentation by #' @name pkg-imports
+#          NAMESPACE file added by Roxygen:
+#            export("%>%")
+#            importFrom(magrittr,"%>%")
 requireNamespace("tidyr", quietly = TRUE)   # for pivot_wider
+
+requireNamespace("patchwork", quietly = TRUE) # for composing plots
+requireNamespace("highcharter", quietly = TRUE)   # for highchart plots
+requireNamespace("dygraphs", quietly = TRUE)   # for for dygraph plots
 
 
 # R CMD check issue: note: no-visible-binding-for-global-variable
@@ -18,14 +23,8 @@ requireNamespace("tidyr", quietly = TRUE)   # for pivot_wider
 # #' @importFrom rlang .data  # for tidyverse use .data pronoun
 # => neeeds @importFrom
 #
-# #' @importFrom utils head   # for usage of utlis::head() otherwise R CMD check note: no-visible-binding...
-
-# library(patchwork) # package for composing plots
-# library(highcharter) # package for highchart plots
-# library(dygraphs) # package for dygraph plots
-requireNamespace("patchwork", quietly = TRUE) # for ggplot(), geom_...()
-requireNamespace("highcharter", quietly = TRUE)   # for filter() and "%>%"
-requireNamespace("dygraphs", quietly = TRUE)   # for pivot_wider
+# #' @importFrom utils head
+# # for usage of utils::head() otherwise R CMD check note: no-visible-binding...
 
 #' Cumulative and daily data trend plot
 #'
@@ -33,17 +32,17 @@ requireNamespace("dygraphs", quietly = TRUE)   # for pivot_wider
 #' facets of `vars_1 = Case_Type`
 #'
 #' @param data A data frame
-#' @param y_cum Unquoted `column name` of the data frame's cumulative cases
-#' @param y_daily Unquoted `column name` of the data frame's daily cases
-#' @param mean_daily Unquoted `column name` of the data frame's daily rolling mean data
-#' @param country Unquoted `column name` of the data frame's countries
+#' @param y_cum Unquoted df data-variable of the cumulative cases
+#' @param y_daily Unquoted df data-variable of the daily cases
+#' @param mean_daily Unquoted df data-variable of the daily rolling mean data
+#' @param country Unquoted df data-variable of the countries
 #' @param span Numeric, span used for rolling mean calculation
 #' @param weeks Numeric, number of time range weeks weeks for the daily data,
 #'   dates are provided in column `default = Date`
-#' @param ... Variable pass through to [ggts_trend_facet()].
-#' Unquoted `column name` of the data frame's dates.
+#' @param ... Other arguments passed on to [ggts_trend_facet()].
+#' Unquoted df data-variable to specify the time index variable (`default: DATE`).
 #'
-#' @return plot object of mode "`plot`"
+#' @return plot object of mode `plot`
 #' @import ggplot2
 #' @import dplyr
 #' @import tidyr
@@ -63,7 +62,7 @@ ggts_cum_daily <- function(data,
                            weeks = 12, ...) {
   data <- data %>% dplyr::filter(Country == country)
 
-  plot_cum_cases <- ggts_trend_facet(data, y = {{ y_cum }}) +
+  plot_cum_cases <- ggts_trend_facet(data, y = {{ y_cum }}, ...) +
     labs(title = paste(country, "- cumulative Cases (since Jan 2020)"))
 
   last_date <- max(data$Date)
@@ -74,7 +73,7 @@ ggts_cum_daily <- function(data,
               size = 1, na.rm = TRUE) +
     scale_x_date(date_labels = "%b %d", date_breaks = "14 days") +
     labs(title = paste(country, "- Daily Cases (past", weeks, "weeks)"),
-         subtitle = paste0("with Rolling Mean of past ", span, " days"))
+         subtitle = paste0("with Rolling Mean over past ", span, " days"))
 
   plot_cum_cases + plot_daily_cases
   # + plot_annotation(tag_levels = "A", title = "title annot")
@@ -85,9 +84,10 @@ ggts_cum_daily <- function(data,
 #' Provide trend facet plot for each case type (e.g. Confirmed and Deaths)
 #'
 #' @param data A data frame
-#' @param x Unquoted `column name` of the data frame's dates
-#' @param y Unquoted `column name` of the data frame's cases
-#' @param vars_1 Unquoted `column name` of the data frame's case types
+#' @param x Unquoted df data-variable to specify the
+#' time index variable (`default: Date`).
+#' @param y Unquoted df data-variable of the cases
+#' @param vars_1 Unquoted df data-variable of the case types
 #' @return plot object of mode "`plot`"
 #' @export
 #' @seealso [ggts_cum_daily]
@@ -122,7 +122,7 @@ ggts_trend_facet <- function(data,
 #'
 #' @inheritParams ggts_trend_facet
 #' @inherit ggts_trend_facet return
-#' @param vars_2 Unquoted `column name` of the data frame's countries
+#' @param vars_2 Unquoted df data-variable of the countries
 #' @export
 #' @seealso [ggts_trend_facet]
 #'
@@ -302,7 +302,7 @@ plot_dygraph_daily <-
   function(data_xts, country_select, last_date, span = 7, weeks = 12) {
     dygraph(data_xts,
             main = paste0(country_select,
-                          " - Daily Cases with Rolling Mean of past ",
+                          " - Daily Cases with Rolling Mean over past ",
                           span, " days")) %>%
       dyAxis("y", label = "Daily Confirmed Cases") %>%
       dyAxis("y2", label = "Daily Death Cases",  independentTicks = TRUE) %>%

@@ -32,9 +32,11 @@ NULL
 
 #' @importFrom magrittr %>%
 #' @export %>%
+#' @importFrom magrittr %$%
+#' @export %$%
 NULL
 
-# If %>% is imported => can be used in the code of the package
+# If %>%, %$% is imported => can be used in the code of the package
 #   but NOT in the examples ! => ImportFrom plus @export
 # see
 # https://stackoverflow.com/questions/56509068/r-package-fails-devtoolscheck-because-could-not-find-function-even-though-t
@@ -47,11 +49,34 @@ NULL
 #'
 #' @details These objects are imported from other packages.
 #' Follow the links to their documentation.
-#' * magrittr forward-pipe operator: [`magrittr::%>%`]
+#' * magrittr forward-pipe [`magrittr::%>%`] and exposition pipe [`magrittr::%$%`] operator
 #'
 #' @name pkg-imports
 #' @aliases %>%
+#' @aliases %$%
 #' @docType import
 NULL
 
+# to avoid RMD check note: no visible binding for global variable
+# - if function has args with default df data-variables settingss
+#    =>  arg_xy = .data$arg is required
+# - if used only within function
+#    - globalVariables() setting is feasible or
+#    - arg_xy <- arg_xz <- NULL  is feasible
 globalVariables(c("Date", "Cases", "Case_Type", "Country"))
+globalVariables(c("worldgeojson"))
+# new global variables for ggts_climate
+# ggts_decomp
+globalVariables(c('Raw', 'Decompressed', 'horiz_line','Year_Month', 'value',
+                  'trend_for_raw', 'NA_replace', 'y_seg_min','y_seg_max'))
+# ggts_histo_forecast_resid, ggts_season,
+# ggts_season_w_smooth, ggts_year_over_month
+globalVariables(c('IQR', 'sd', 'dnorm', '.resid', '..density..',
+                  'Winter_avg', 'Spring_avg', 'Summer_avg', 'Fall_avg', 'Trend',
+                  'Winter', 'Fall', 'Year', 'Season',
+                  'Year_Month', 'Month', 'Year_Month', 'rol_mean', 'Period'))
+# new global variables for uts_climate
+globalVariables(c('City', 'Measure', 'Year_Season', 'count_lag', 'Season_avg',
+                  'trend', 'remainder', 'seasonal'))
+globalVariables(c('Interpolated', 'Remainder', 'Seasonal', 'Seasonal_Adjust'))
+

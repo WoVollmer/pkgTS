@@ -18,24 +18,24 @@ ggts_cum_daily(
 \arguments{
 \item{data}{A data frame}
 
-\item{y_cum}{Unquoted \verb{column name} of the data frame's cumulative cases}
+\item{y_cum}{Unquoted df data-variable of the cumulative cases}
 
-\item{y_daily}{Unquoted \verb{column name} of the data frame's daily cases}
+\item{y_daily}{Unquoted df data-variable of the daily cases}
 
-\item{mean_daily}{Unquoted \verb{column name} of the data frame's daily rolling mean data}
+\item{mean_daily}{Unquoted df data-variable of the daily rolling mean data}
 
-\item{country}{Unquoted \verb{column name} of the data frame's countries}
+\item{country}{Unquoted df data-variable of the countries}
 
 \item{span}{Numeric, span used for rolling mean calculation}
 
 \item{weeks}{Numeric, number of time range weeks weeks for the daily data,
 dates are provided in column \code{default = Date}}
 
-\item{...}{Variable pass through to \code{\link[=ggts_trend_facet]{ggts_trend_facet()}}.
-Unquoted \verb{column name} of the data frame's dates.}
+\item{...}{Other arguments passed on to \code{\link[=ggts_trend_facet]{ggts_trend_facet()}}.
+Unquoted df data-variable to specify the time index variable (\code{default: DATE}).}
 }
 \value{
-plot object of mode "\code{plot}"
+plot object of mode \code{plot}
 }
 \description{
 Provide \strong{trend plot} for \emph{cumulative} and \emph{daily} cases with
