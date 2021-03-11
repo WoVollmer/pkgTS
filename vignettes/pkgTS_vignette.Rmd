@@ -1,6 +1,8 @@
 ---
 title: "Vignette pkgTS TimeSeries Functions"
 output: rmarkdown::html_vignette
+author: "WoVollmer"
+date: '`r Sys.Date()`'
 vignette: >
   %\VignetteIndexEntry{Vignette pkgTS TimeSeries Functions}
   %\VignetteEngine{knitr::rmarkdown}
@@ -8,6 +10,9 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
+
+knitr::opts_chunk$set(fig.width = 7, fig.asp = 0.618)
+
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -16,4 +21,103 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(pkgTS)
+```
+
+
+# R Files
+
+Up to now following R files are part of the package:
+
+```{r, echo = TRUE}
+
+dir("./../R/")
+
+```
+
+
+# Corona data and example figure
+
+The data for the ggts_corona functions are a `data.frame` /  `tibble` 
+with following structure:
+
+## Data *long* format with `Case_Type = Confirmed | Deaths`:
+
+```{r}
+
+tail(corona_data %>% dplyr::filter(Country == "Germany"))
+
+
+```
+
+## Data *wide* format creation with dissolved `Case_Type`:
+
+```{r}
+
+tail(uts_get_corona_data_wide(
+  corona_data %>% dplyr::filter(Country == "Germany")))
+
+```
+
+
+## Figure
+
+Basic example plot of corona time series data:
+
+```{r, fig.show='hold'}
+
+ggts_cum_daily(corona_data, country = "Germany", weeks = 6)
+
+```
+
+
+## Corona Virus Dashboard
+
+> The **`Corona Virus Dashboard`** provides analysis of the time series data provided by the **Johns Hopkins University** on GitHub. For links and references see the Dashboard-file *Corona Virus Dashboard Web Site* rsp. RMD-file *Corona_Virus_TS_Dashboard.Rmd*.
+
+The 
+[Corona_Virus_TS_Dashboard.Rmd](https://github.com/WoVollmer/R-TimesSeriesAnalysis/tree/master/Corona-Virus)
+file is stored on GitHub repository.
+
+The [Corona Virus Dashboard Web Site](https://wovollmer.github.io/github.io/) 
+is published as **GitHub page**
+
+
+# Climate data and example figure
+
+The data for the ggts_climate functions are a `data.frame` /  `tibble` 
+with following structure:
+
+## Data *long* format with `Measure = Temperature | Precipitation`:
+
+```{r}
+
+head(monthly_climate_basel)
+
+tail(monthly_climate_basel)
+
+```
+
+## Data *wide* format with `Measure = CO2`:
+
+```{r}
+
+tail(monthly_co2_wide)
+
+```
+
+
+## Figure
+
+Basic example plot of climate time series data:
+
+```{r, fig.show='hold'}
+
+plot_monthly <- ggts_year_over_month(monthly_climate_basel %>%
+                                       dplyr::filter(Measure == "Temperature"), period = Year)
+
+plot_monthly
+plot_monthly + ggplot2::coord_polar("x", start = pi)
+
+ggts_year_over_month(monthly_climate_basel, period = Year) +
+  ggplot2::facet_wrap(~Measure, ncol = 1, scales = "free_y")
 ```

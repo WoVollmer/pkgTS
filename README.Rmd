@@ -19,8 +19,10 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 The goal of R package `pkgTS` is to provide functions for time series analysis, 
-e.g. usable for climate or corona virus spread analysis.
+e.g. usable for
 
+* climate temperature, precipitation or atmospheric CO_2 concentration analysis
+* corona virus spread analysis.
 
 ## Installation
 
@@ -30,9 +32,10 @@ You can install the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("WoVollmer/pkgTS")
 ```
+
 ## Example
 
-This is a basic example which shows you how to plot corona time series data:
+This is a basic example which shows how to plot corona time series data:
 
 ```{r example}
 library(pkgTS)

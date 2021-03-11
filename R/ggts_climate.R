@@ -275,8 +275,14 @@ ggts_season <- function(data) {
 #' @param period group and col aestetic for points and lines
 #' @inherit ggts_w_rol_mean return
 #' @examples
-#' ggts_year_over_month(monthly_climate_basel %>%
+#' plot_monthly <- ggts_year_over_month(monthly_climate_basel %>%
 #'   dplyr::filter(Measure == "Temperature"), period = Year)
+#' plot_monthly
+#' plot_monthly + ggplot2::coord_polar("x", start = pi)
+#' # remark: coord_polar doesn't support free scales, filter Measure beforehand
+#'
+#' ggts_year_over_month(monthly_climate_basel, period = Year) +
+#'   ggplot2::facet_wrap(~Measure, ncol = 1, scales = "free_y")
 #' @export
 ggts_year_over_month <- function(data, time = Month, y = count, period = Period) {
   x_axis_theme <- element_text(size = 14)
