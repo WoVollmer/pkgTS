@@ -185,7 +185,6 @@ ggts_logscale <- function(data,
                strip.position = "left")
 }
 
-
 ### highchart #############################
 
 #' highcharter World Map plot
